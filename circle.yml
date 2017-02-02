@@ -1,0 +1,13 @@
+dependencies:
+  pre:
+    - echo y | android list sdk
+    - git clone https://github.com/mherod/android-sdk-licenses.git $ANDROID_HOME/licenses
+
+test:
+  pre:
+    - export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools:$PATH"
+  override:
+    - ./gradlew build check test --console=plain
+    - cp -r app/build/outputs $CIRCLE_ARTIFACTS
+    - cp -r app/build/reports $CIRCLE_TEST_REPORTS
+    - find app/build -name "*.xml" -exec "cp {} $CIRCLE_TEST_REPORTS" \;
